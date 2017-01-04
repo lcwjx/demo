@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppDialogTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="AppProgressDialogTheme" parent="AppDialogTheme">
+        <item name="android:windowBackground">@color/progress_dialog_bg</item>
+    </style>
+
+    <style name="text_12_333333">
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">#ff333333</item>
+    </style>
+</resources>
