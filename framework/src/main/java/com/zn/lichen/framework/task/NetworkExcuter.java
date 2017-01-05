@@ -178,4 +178,8 @@ public class NetworkExcuter {
     private void releaseTask(String tag) {
         taskModelHashMap.remove(tag);
     }
+
+    public void cancelRequest(String tag) {
+
+    }
 }

@@ -18,6 +18,7 @@ import com.zn.lichen.framework.R;
 import com.zn.lichen.framework.manager.FragmentExchangeManager;
 import com.zn.lichen.framework.model.entity.DialogExchangeModel;
 import com.zn.lichen.framework.network.ServiceCallback;
+import com.zn.lichen.framework.task.NetworkExcuter;
 import com.zn.lichen.framework.task.NetwrokTaskError;
 
 /**
@@ -62,10 +63,6 @@ public class ProcessDialogFragment extends BaseDialogFragment implements Service
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layoutView = inflater.inflate(R.layout.process_load_data_layout, container, false);
-//        layoutView.setOnClickListener(mSpaceClickListener);
-//        TextLoadingView clockLoadingView = (TextLoadingView) layoutView.findViewById(R.id.image);
-//        clockLoadingView.start();
-
         SimpleDraweeView img = (SimpleDraweeView) layoutView.findViewById(R.id.image);
         mDlgContent = (TextView) layoutView.findViewById(R.id.tip);
         if (!TextUtils.isEmpty(mContentTxt)) {
@@ -96,7 +93,7 @@ public class ProcessDialogFragment extends BaseDialogFragment implements Service
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-//        NetworkExcuter.getInstance().cancelRequest(mDialogTag);
+        NetworkExcuter.getInstance().cancelRequest(mDialogTag);
     }
 
     public void setContentText(String content) {
