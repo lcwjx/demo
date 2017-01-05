@@ -10,22 +10,12 @@
         android:layout_height="150dp"
         android:layout_gravity="center">
 
-        <!--<ProgressBar-->
-        <!--android:id="@+id/progressbar"-->
-        <!--style="?android:attr/progressBarStyleSmall"-->
-        <!--android:layout_width="32dip"-->
-        <!--android:layout_height="32dip"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginTop="15dip"-->
-        <!--android:indeterminateDrawable="@drawable/loading_drawable_progress"-->
-        <!--android:indeterminateOnly="true" />-->
-
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/image"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_centerInParent="true"
-            app:actualImageScaleType="fitXY" />
+            app:actualImageScaleType="fitXY"/>
 
         <TextView
             android:id="@+id/tip"
@@ -37,7 +27,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginTop="10dip"
             android:gravity="center"
-            android:singleLine="true" />
+            android:singleLine="true"/>
         <!-- </LinearLayout> -->
     </RelativeLayout>
 

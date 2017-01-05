@@ -6,11 +6,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
+import com.google.gson.Gson;
+import com.zn.lichen.framework.constants.DialogType;
 import com.zn.lichen.framework.interfaces.MarkAble;
+import com.zn.lichen.framework.manager.DialogManager;
+import com.zn.lichen.framework.model.entity.DialogExchangeModel;
+import com.zn.lichen.framework.network.BusinessResult;
 import com.zn.lichen.framework.network.OkhttpUtil;
 import com.zn.lichen.framework.network.ServiceCallback;
 import com.zn.lichen.framework.network.ServiceParams;
 import com.zn.lichen.framework.network.ServiceTask;
+import com.zn.lichen.framework.utils.LogUtil;
+import com.zn.lichen.framework.widget.ProcessDialogFragment;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -63,15 +70,22 @@ public class NetworkExcuter {
         ServiceCallback callback = taskModel.getCallback();
         ServiceParams serviceParams = taskModel.getServiceParams();
         final String tag = taskModel.getTag();
+        final ProcessDialogFragment processDialog = fragmentManager == null ? null : makeProcessDialog(taskModel, fragmentManager, tag);
         Request okRequest = makeOkRequest(taskModel);
-
         Callback networkcallback = new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 //网路异常会走到这
                 e.printStackTrace();
                 handleNetworkError(tag);
-
+                if (processDialog != null) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            processDialog.dismiss();
+                        }
+                    });
+                }
                 releaseTask(tag);
             }
 
@@ -84,10 +98,16 @@ public class NetworkExcuter {
                 } else {
                     //处理异常数据
                     handleServerError(response, tag);
-
                 }
 
-
+                if (processDialog != null) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            processDialog.dismiss();
+                        }
+                    });
+                }
                 releaseTask(tag);
             }
         };
@@ -110,6 +130,15 @@ public class NetworkExcuter {
 
     }
 
+    /**
+     * 使用缓存数据
+     *
+     * @param tag
+     */
+    private void handleCacheData(String tag) {
+
+    }
+
 
     /**
      * 处理正常返回的数据
@@ -117,9 +146,74 @@ public class NetworkExcuter {
      * @param response
      * @param tag
      */
-    private void handleResponse(Response response, String tag) {
+    private <T> void handleResponse(Response response, String tag) {
+        ServiceTask taskModel = taskModelHashMap.get(tag);
+        final ServiceParams serviceParams = taskModel.getServiceParams();
+        final ServiceCallback callback = taskModel.getCallback();
+        final T t;
+        try {
+            String string = response.body().string();
+            LogUtil.d(string);
+            if (serviceParams.getResponseType() == String.class) {
+                t = (T) string;
+            } else {
+                t = (T) new Gson().fromJson(string, serviceParams.getResponseType());
+            }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+            NetwrokTaskError error = new NetwrokTaskError(NetwrokTaskError.TaskCodeList.ServerError, "接口异常");
+            dispatchErrorResponse(callback, error, serviceParams.getServiceTag());
+            return;
+        }
 
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (serviceParams.getBusinessParser() != null) {
+                    if (t == null) {
+                        NetwrokTaskError error = new NetwrokTaskError(NetwrokTaskError.TaskCodeList.ServerError, "数据异常");
+                        dispatchErrorResponse(callback, error, serviceParams.getServiceTag());
+                        return;
+                    }
+                    BusinessResult result = serviceParams.getBusinessParser().parseData(t);
+                    if (result.isSuccess) {
+                        cacheResponse(serviceParams, t);
+                        dispatchResponse(serviceParams.getServiceTag(), callback);
+                    } else {
+                        NetwrokTaskError error = new NetwrokTaskError(result);
+                        dispatchErrorResponse(callback, error, serviceParams.getServiceTag());
+                    }
+                } else {
+                    dispatchResponse(serviceParams.getServiceTag(), callback);
+                }
+            }
+        });
+    }
+
+    /**
+     * 对response进行分发
+     *
+     * @param serviceTag
+     * @param callback
+     */
+    private void dispatchResponse(String serviceTag, ServiceCallback callback) {
+        if (callback != null) {
+            callback.onTaskSuccess(serviceTag);
+        }
+    }
+
+    /**
+     * 分发异常，回传给callback
+     *
+     * @param callback
+     * @param error
+     * @param serviceTag
+     */
+    private void dispatchErrorResponse(ServiceCallback callback, NetwrokTaskError error, String serviceTag) {
+        if (callback != null) {
+            callback.onTaskFail(error, serviceTag);
+        }
     }
 
     /**
@@ -151,11 +245,22 @@ public class NetworkExcuter {
     }
 
     /**
-     * 缓存数据
+     * 取消请求
      *
      * @param tag
      */
-    private void handleCacheData(String tag) {
+    public void cancelRequest(String tag) {
+
+    }
+
+    /**
+     * 缓存数据
+     *
+     * @param serviceParams
+     * @param t
+     * @param <T>
+     */
+    private <T> void cacheResponse(ServiceParams serviceParams, T t) {
 
     }
 
@@ -179,7 +284,22 @@ public class NetworkExcuter {
         taskModelHashMap.remove(tag);
     }
 
-    public void cancelRequest(String tag) {
-
+    /**
+     * 根据task配置进行process loading处理
+     *
+     * @param taskModel
+     * @param fragmentManager
+     * @param tag
+     * @return
+     */
+    private ProcessDialogFragment makeProcessDialog(ServiceTask taskModel, FragmentManager fragmentManager, String tag) {
+        UIConfig uiConfig = taskModel.getUiConfig();
+        if (uiConfig.isShowProcess) {
+            DialogExchangeModel.DialogExchangeModelBuilder builder = new DialogExchangeModel.DialogExchangeModelBuilder(DialogType.PROGRESS, tag);
+            builder.setBackable(uiConfig.isCancelable).setDialogContext(uiConfig.progressContent);
+            return (ProcessDialogFragment) DialogManager.showDialogFragment(fragmentManager, builder.creat());
+        } else {
+            return null;
+        }
     }
 }
