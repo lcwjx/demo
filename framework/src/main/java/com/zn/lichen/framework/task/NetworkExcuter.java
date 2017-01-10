@@ -5,10 +5,14 @@ import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.zn.lichen.framework.base.BaseApplication;
 import com.zn.lichen.framework.constants.DialogType;
 import com.zn.lichen.framework.interfaces.MarkAble;
+import com.zn.lichen.framework.manager.CacheManager;
 import com.zn.lichen.framework.manager.DialogManager;
 import com.zn.lichen.framework.model.entity.DialogExchangeModel;
 import com.zn.lichen.framework.network.BusinessResult;
@@ -21,6 +25,7 @@ import com.zn.lichen.framework.widget.ProcessDialogFragment;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -135,8 +140,24 @@ public class NetworkExcuter {
      *
      * @param tag
      */
-    private void handleCacheData(String tag) {
+    private <T> void handleCacheData(String tag) {
+        ServiceTask tastModel = taskModelHashMap.get(tag);
+        ServiceParams serviceParams = tastModel.getServiceParams();
+        ServiceCallback callback = tastModel.getCallback();
 
+        T response = (T) CacheManager.getInstance().getDataFromCache(serviceParams.getUrl(), serviceParams.getResponseType());
+        if (response == null) return;
+        if (serviceParams.getBusinessParser() != null) {
+            BusinessResult result = serviceParams.getBusinessParser().parseData(response);
+            if (result.isSuccess) {
+                dispatchResponse(serviceParams.getServiceTag(), callback);
+            } else {
+                NetwrokTaskError error = new NetwrokTaskError(result);
+                dispatchErrorResponse(callback, error, serviceParams.getServiceTag());
+            }
+        } else {
+            dispatchResponse(serviceParams.getServiceTag(), callback);
+        }
     }
 
 
@@ -223,7 +244,19 @@ public class NetworkExcuter {
      * @param tag
      */
     private void handleServerError(Response response, String tag) {
+        final ServiceTask taskModel = taskModelHashMap.get(tag);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                NetwrokTaskError taskError = new NetwrokTaskError(NetwrokTaskError.TaskCodeList.ServerError, "请求失败");
 
+                if (taskModel.getUiConfig().showErrorToast) {
+                    Toast.makeText(BaseApplication.getAppContext(), taskError.errorString, Toast.LENGTH_SHORT).show();
+                }
+                ServiceCallback callback = taskModel.getCallback();
+                dispatchErrorResponse(callback, taskError, taskModel.getServiceParams().getServiceTag());
+            }
+        });
     }
 
     /**
@@ -232,7 +265,20 @@ public class NetworkExcuter {
      * @param tag
      */
     private void handleNetworkError(String tag) {
-
+        final ServiceTask taskModel = taskModelHashMap.get(tag);
+        if (taskModel != null) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (taskModel.getUiConfig().showErrorToast) {
+                        Toast.makeText(BaseApplication.getAppContext(), "网络链接不可用,请稍后再试", Toast.LENGTH_SHORT).show();
+                    }
+                    NetwrokTaskError taskError = new NetwrokTaskError(NetwrokTaskError.TaskCodeList.NetworkError, "网络链接不可用,请稍后再试");
+                    ServiceCallback callback = taskModel.getCallback();
+                    dispatchErrorResponse(callback, taskError, taskModel.getServiceParams().getServiceTag());
+                }
+            });
+        }
     }
 
     /**
@@ -245,11 +291,42 @@ public class NetworkExcuter {
     }
 
     /**
-     * 取消请求
+     * 取消请求（如果tag为空，取消所有请求）
      *
      * @param tag
      */
     public void cancelRequest(String tag) {
+        if (TextUtils.isEmpty(tag)) {
+            taskModelHashMap.clear();
+            mOkHttpClient.dispatcher().cancelAll();
+        } else {
+            List<Call> callList = mOkHttpClient.dispatcher().queuedCalls();
+            for (Call call : callList) {
+                Object object = call.request().tag();
+                //注意:项目中fresco图片加载也使用了okhttp的网络通道,因此若该call为图片加载,则tag为空
+                if (object instanceof String) {
+                    String str = (String) object;
+                    if (str.contains(tag)) {
+                        call.cancel();
+                        taskModelHashMap.remove(str);
+                    }
+                }
+
+            }
+            List<Call> runningList = mOkHttpClient.dispatcher().runningCalls();
+            for (Call call : runningList) {
+                Object object = call.request().tag();
+                //注意:项目中fresco图片加载也使用了okhttp的网络通道,因此若该call为图片加载,则tag为空
+                if (object instanceof String) {
+                    String str = (String) object;
+                    if (str.contains(tag)) {
+                        call.cancel();
+                        taskModelHashMap.remove(str);
+                    }
+                }
+            }
+
+        }
 
     }
 
@@ -257,11 +334,13 @@ public class NetworkExcuter {
      * 缓存数据
      *
      * @param serviceParams
-     * @param t
+     * @param response
      * @param <T>
      */
-    private <T> void cacheResponse(ServiceParams serviceParams, T t) {
-
+    private <T> void cacheResponse(ServiceParams serviceParams, T response) {
+        if (serviceParams.isNeedCacheData()) {
+            CacheManager.getInstance().putPageData(serviceParams.getUrl(), response);
+        }
     }
 
     /**
