@@ -9,6 +9,10 @@ public class BusinessResult {
     public boolean isSuccess = true;
     public String errorString = "";
 
+    public BusinessResult(boolean isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
 
     public BusinessResult(String data) {
 

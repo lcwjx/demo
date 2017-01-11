@@ -26,4 +26,10 @@
         <item name="android:textSize">15dip</item>
         <item name="android:textColor">#333333</item>
     </style>
+
+    <style name="hor_cell_line">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">#ffe5e5e5</item>
+    </style>
 </resources>

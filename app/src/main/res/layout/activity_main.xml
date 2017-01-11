@@ -1,18 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.zn.lichen.lcdemo.MainActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#fff"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"/>
-</RelativeLayout>
+    <com.zn.lichen.lcdemo.widget.FragmentTabHost
+        android:id="@+id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/tab_host_index"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#fff"
+            android:orientation="vertical">
+
+            <View style="@style/hor_cell_line"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/main"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="3dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:padding="3dp"
+                    android:text="tab_1"
+                    android:textSize="14dp"/>
+
+                <TextView
+                    android:id="@+id/healthy"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="3dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:padding="3dp"
+                    android:text="tab_2"
+                    android:textSize="14dp"/>
+
+                <TextView
+                    android:id="@+id/mine"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawablePadding="3dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:padding="3dp"
+                    android:text="tab_3"
+                    android:textSize="14dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/tab_host_continar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/tab_host_index">
+        </FrameLayout>
+    </com.zn.lichen.lcdemo.widget.FragmentTabHost>
+
+</LinearLayout>
