@@ -25,7 +25,7 @@ public class OkhttpUtil {
 
     public static synchronized void init(SSLSocketFactory factory) {
         sOkHttpClient = new OkHttpClient.Builder()
-                .sslSocketFactory(factory)//设置https证书
+//                .sslSocketFactory(factory)//设置https证书
                 .readTimeout(30, TimeUnit.SECONDS)//设置read超时时间
                 .build();
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.zn.lichen.framework.base.BaseActivity;
 import com.zn.lichen.lcdemo.R;
 import com.zn.lichen.lcdemo.view.fragment.TabFragment;
+import com.zn.lichen.lcdemo.view.fragment.TabThirdFragment;
 import com.zn.lichen.lcdemo.view.fragment.TabTwoFragment;
 import com.zn.lichen.lcdemo.widget.FragmentTabHost;
 
@@ -37,7 +38,7 @@ public class MainActivity extends BaseActivity {
     private void initView() {
         mTabhost.addTab(TAB_TAG1, TabFragment.class, null, R.id.tab_1);
         mTabhost.addTab(TAB_TAG2, TabTwoFragment.class, null, R.id.tab_2);
-        mTabhost.addTab(TAB_TAG3, TabFragment.class, null, R.id.tab_3);
+        mTabhost.addTab(TAB_TAG3, TabThirdFragment.class, null, R.id.tab_3);
         mTabhost.setUp(this, getSupportFragmentManager());
         mTabhost.setTabHostListener(new FragmentTabHost.TabHostListener() {
             @Override

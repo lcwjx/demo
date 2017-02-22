@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.zn.lichen.lcdemo">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".base.LCApplication"
         android:allowBackup="true"
@@ -16,6 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        
+        <activity android:name=".view.activity.RxOneActivity"/>
     </application>
+    
 
 </manifest>

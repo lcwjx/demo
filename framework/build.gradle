@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
-def dbflow_version = "3.1.1"
+//def dbflow_version = "3.1.1"
 
 android {
     compileSdkVersion 23
@@ -28,21 +28,24 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.google.code.gson:gson:2.3.1'
-
     compile 'com.facebook.fresco:fresco:0.12.0'
     // 支持 GIF 动图，需要添加
     compile 'com.facebook.fresco:animated-gif:0.12.0'
-
-//    // 支持 WebP （静态图+动图），需要添加
-//    compile 'com.facebook.fresco:animated-webp:0.12.0'
-//    compile 'com.facebook.fresco:webpsupport:0.12.0'
-
-//    // 仅支持 WebP 静态图，需要添加
-//    compile 'com.facebook.fresco:webpsupport:0.12.0'
-
-    compile "com.facebook.fresco:imagepipeline-okhttp3:0.12.0+"
-
-    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    //    // 支持 WebP （静态图+动图），需要添加
+    //    compile 'com.facebook.fresco:animated-webp:0.12.0'
+    //    compile 'com.facebook.fresco:webpsupport:0.12.0'
+    //    // 仅支持 WebP 静态图，需要添加
+    //    compile 'com.facebook.fresco:webpsupport:0.12.0'
+    compile 'com.facebook.fresco:imagepipeline-okhttp3:0.12.0+'
+    //    compile 'com.paic.mhis:crosswalk:1.0'
+//    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+//    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+//    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    compile 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0'
+    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:1.0.0'
+    compile 'com.jakewharton.rxbinding:rxbinding-design:1.0.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 }

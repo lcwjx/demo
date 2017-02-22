@@ -7,4 +7,5 @@
     <color name="divider">#ffe5e5e5</color>
     <color name="color_bg_white2">#fff5f5f9</color>
     <color name="blue">#ff35c7fa</color>
+    <color name="color_text_gray">@color/gray2</color>
 </resources>

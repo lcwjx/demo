@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:fresco="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@color/blue"
+              android:gravity="center"
               android:orientation="vertical">
 
-    <TextView
-        android:id="@id/content_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+    <com.zn.lichen.lcdemo.widget.MyScrollview
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.zn.lichen.lcdemo.widget.MyButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="mybutton"/>
+
+            <TextView
+                android:id="@id/content_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:text="3333"/>
+        </LinearLayout>
+    </com.zn.lichen.lcdemo.widget.MyScrollview>
+
+
+    <!--<com.facebook.drawee.view.SimpleDraweeView-->
+    <!--android:id="@+id/main_sdv"-->
+    <!--android:layout_width="25dp"-->
+    <!--android:layout_height="25dp"-->
+    <!--fresco:placeholderImage="@mipmap/ic_launcher"-->
+    <!--fresco:placeholderImageScaleType="fitCenter"-->
+    <!--fresco:progressBarAutoRotateInterval="1000"-->
+    <!--fresco:progressBarImage="@drawable/si_refresh_icon"-->
+    <!--fresco:progressBarImageScaleType="centerInside"/>-->
 </LinearLayout>
