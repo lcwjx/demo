@@ -5,8 +5,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.zn.lichen.framework.base.BaseFragment;
 import com.zn.lichen.framework.network.ServiceCallback;
 import com.zn.lichen.framework.network.ServiceParams;
@@ -28,7 +30,10 @@ public class TabThirdFragment extends BaseFragment {
 
     @BindView(R.id.text_json)
     TextView mTextJson;
+    @BindView(R.id.imageView)
+    ImageView mImageView;
     private Unbinder mUnbinder;
+    private TabThirdViewmodel mViewmodel;
 
     @Override
     protected String[] listReceiveActions() {
@@ -51,8 +56,8 @@ public class TabThirdFragment extends BaseFragment {
 
     private void initData() {
 
-        final TabThirdViewmodel viewmodel = new TabThirdViewmodel();
-        ServiceParams serviceParams = FirstService.getJson(viewmodel);
+        mViewmodel = new TabThirdViewmodel();
+        ServiceParams serviceParams = FirstService.getJson(mViewmodel);
         ServiceTask serviceTask = new ServiceTask(serviceParams);
         serviceTask.setShowProcess(true).setCancelable(true);
         serviceTask.setCallback(new ServiceCallback() {
@@ -63,7 +68,7 @@ public class TabThirdFragment extends BaseFragment {
 
             @Override
             public void onTaskSuccess(String serverTag) {
-                mTextJson.setText(viewmodel.json);
+                refreshUI();
 
             }
 
@@ -74,6 +79,12 @@ public class TabThirdFragment extends BaseFragment {
         });
         NetworkExcuter.getInstance().excute(serviceTask, TabThirdFragment.this);
 
+    }
+
+    private void refreshUI() {
+        Glide.with(this)
+                .load(mViewmodel.circleImageEntities.get(0).imageUrl)
+                .into(mImageView);
     }
 
     @Override

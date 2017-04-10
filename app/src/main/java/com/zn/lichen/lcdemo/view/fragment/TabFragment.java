@@ -48,17 +48,6 @@ public class TabFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.fragment_layout, container, false);
         mUnbinder = ButterKnife.bind(this, root);
         mContentText.setText("TabFragment");
-//        Flowable.just(1).flatMap(new Function<Integer, Publisher<?>>() {
-//            @Override
-//            public Publisher<?> apply(@NonNull Integer integer) throws Exception {
-//                return null;
-//            }
-//        }).subscribe(new Consumer<Object>() {
-//            @Override
-//            public void accept(@NonNull Object o) throws Exception {
-//
-//            }
-//        });
 
         initView();
         return root;
@@ -89,6 +78,7 @@ public class TabFragment extends BaseFragment {
                         LogUtil.e("mContentText----onTouch----tempY" + tempY);
                         break;
                     case MotionEvent.ACTION_UP:
+                        LogUtil.e("mContentText----onTouch----actionUp");
                         break;
                 }
                 return false;

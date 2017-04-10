@@ -33,6 +33,6 @@ public class MyButton extends Button {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         LogUtil.e("MyButton------" + "onTouchEvent");
-        return super.onTouchEvent(event);
+        return true;
     }
 }

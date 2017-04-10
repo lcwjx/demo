@@ -1,11 +1,15 @@
 package com.zn.lichen.lcdemo.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.zn.lichen.framework.base.BaseActivity;
 import com.zn.lichen.lcdemo.R;
+import com.zn.lichen.lcdemo.widget.Titanic;
+import com.zn.lichen.lcdemo.widget.TitanicTextView;
+import com.zn.lichen.lcdemo.widget.Typefaces;
 
 import java.util.concurrent.TimeUnit;
 
@@ -44,6 +48,14 @@ public class RxOneActivity extends BaseActivity {
             }
         });
 
+        TitanicTextView tv = (TitanicTextView) findViewById(R.id.my_text_view);
+
+        // set fancy typeface
+        tv.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
+
+        // start animation
+        new Titanic().start(tv);
+
     }
 
     private void startTimer() {
@@ -61,6 +73,7 @@ public class RxOneActivity extends BaseActivity {
                     @Override
                     public void onCompleted() {
                         mGetAuthCode.setText("获取验证码");
+                        startActivity(new Intent(RxOneActivity.this, DownloadActivity.class));
                     }
 
                     @Override
