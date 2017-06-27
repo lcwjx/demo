@@ -1,5 +1,7 @@
 package com.zn.lichen.lcdemo.view.fragment;
 
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import com.zn.lichen.framework.task.NetwrokTaskError;
 import com.zn.lichen.lcdemo.R;
 import com.zn.lichen.lcdemo.control.service.FirstService;
 import com.zn.lichen.lcdemo.model.viewmodel.TabThirdViewmodel;
+import com.zn.lichen.lcdemo.view.activity.SuitLinesActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +51,8 @@ public class TabThirdFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        DataBindingUtil.inflate(inflater, R.layout.fragment_third_layout, container, false);
+
         View rootView = inflater.inflate(R.layout.fragment_third_layout, null);
         mUnbinder = ButterKnife.bind(this, rootView);
         initData();
@@ -55,6 +60,8 @@ public class TabThirdFragment extends BaseFragment {
     }
 
     private void initData() {
+        new TabTwoFragment();
+        new Intent();
 
         mViewmodel = new TabThirdViewmodel();
         ServiceParams serviceParams = FirstService.getJson(mViewmodel);
@@ -85,6 +92,12 @@ public class TabThirdFragment extends BaseFragment {
         Glide.with(this)
                 .load(mViewmodel.circleImageEntities.get(0).imageUrl)
                 .into(mImageView);
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), SuitLinesActivity.class));
+            }
+        });
     }
 
     @Override

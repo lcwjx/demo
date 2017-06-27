@@ -1,7 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<layout xmlns:android="http://schemas.android.com/apk/res/android">-->
+    <!--<data>-->
+        <!--<variable-->
+            <!--name="viewModel"-->
+            <!--type="com.zn.lichen.lcdemo.model.viewmodel.PersonInfo"></variable>-->
 
-</LinearLayout>
+    <!--</data>-->
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+
+        <!--<TextView-->
+            <!--android:id="@+id/text_name"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@{viewModel.name}"/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/text_age"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@{viewModel.age}"/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/text_sex"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@{viewModel.sex}"/>-->
+
+    </LinearLayout>
+<!--</layout>-->

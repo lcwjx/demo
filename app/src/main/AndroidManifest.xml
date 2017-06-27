@@ -21,6 +21,8 @@
 
         <activity android:name=".view.activity.RxOneActivity"/>
         <activity android:name=".view.activity.DownloadActivity"/>
+        <activity android:name=".view.activity.SuitLinesActivity"/>
+        <activity android:name=".view.activity.KotlinActivity"/>
     </application>
 
 
